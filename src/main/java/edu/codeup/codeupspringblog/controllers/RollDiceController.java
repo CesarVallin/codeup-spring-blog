@@ -29,8 +29,12 @@ public class RollDiceController {
         diceRolls.add(randomNumber3);
         diceRolls.add(randomNumber4);
 
-//        boolean match = number == randomNumber;
-//        model.addAttribute("match", match);
+//        if(randomNumber == number) {
+//            model.addAttribute("match", true);
+//        } else {
+//            model.addAttribute("match", false);
+//        }
+
         int matchCounter = 0;
         for(int i = 0; i < diceRolls.size(); i++) {
             if(diceRolls.get(i) == number) {
