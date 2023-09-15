@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/math")
 public class MathController {
 
     @GetMapping("/add/{num1}/and/{num2}")
@@ -30,8 +29,9 @@ public class MathController {
 
     @GetMapping("/divide/{num1}/by/{num2}")
     @ResponseBody
-    public String divideNumbs(@PathVariable int num1, @PathVariable int num2) {
-        return String.format("%s divided by %s = %s", num1, num2, num1 / num2);
+    public String divideNumbs(@PathVariable double num1, @PathVariable double num2) {
+        double total = num1 / num2;
+        return String.format("%s divided by %s = %s", num1, num2, total);
     }
 
 }

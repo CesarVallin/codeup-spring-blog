@@ -16,28 +16,28 @@ public class PostController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public String postId(@PathVariable long id) {
+    public String viewIndividualPost(@PathVariable long id) {
         return String.format("view an individual post from id %s", id);
     }
 
     @GetMapping("/create")
     @ResponseBody
-    public String createForm() {
+    public String showCreatePostView() {
         return "view the form for creating a post";
+    }
+
+    @PostMapping("/create")
+    @ResponseBody
+    public String createPost() {
+        return "create a new post";
     }
 
 //    @PostMapping("/create")
 //    @ResponseBody
-//    public String postForm() {
-//        return "create a new post";
+//    public String greetUser(@RequestParam(name = "username") String username, @RequestParam(name = "email") String email) {
+//        System.out.println(username + " " + email);
+//        return String.format("Hello %s %s", username, email);
 //    }
-
-    @PostMapping("/create")
-    @ResponseBody
-    public String greetUser(@RequestParam(name = "username") String username, @RequestParam(name = "email") String email) {
-        System.out.println(username + " " + email);
-        return String.format("Hello %s %s", username, email);
-    }
 
 
 }
