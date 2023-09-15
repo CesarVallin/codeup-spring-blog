@@ -5,16 +5,37 @@
     <title>Title</title>
 </head>
 <body>
-    <a href="/roll-dice/1">1</a>
-    <a href="/roll-dice/2">2</a>
-    <a href="/roll-dice/3">3</a>
-    <a href="/roll-dice/4">4</a>
-    <a href="/roll-dice/5">5</a>
-    <a href="/roll-dice/6">6</a>
+    <div>
+        <h2>Guess a number: </h2>
+        <a href="/roll-dice/1">1</a>
+        <a href="/roll-dice/2">2</a>
+        <a href="/roll-dice/3">3</a>
+        <a href="/roll-dice/4">4</a>
+        <a href="/roll-dice/5">5</a>
+        <a href="/roll-dice/6">6</a>
+    </div>
+
 
     <div>
+        <h2>You guessed</h2>
         <h3 th:text="${guessedNumber}"></h3>
     </div>
+
+    <h2>Dice rolls:</h2>
+    <div th:each="roll : ${diceRolls}">
+        <h3 th:text="${roll}"></h3>
+    </div>
+
+    <div>
+        <h2>You guessed this many correct:</h2>
+        <h3 th:text="${matchCounter}"></h3>
+    </div>
+
+<!--    <div>-->
+<!--        <h3 th:if="${randomNumber != null && match}">You guessed correctly</h3>-->
+<!--        <h3 th:if="${randomNumber != null && !match}">You guessed incorrectly</h3>-->
+<!--    </div>-->
+
 
 </body>
 </html>
