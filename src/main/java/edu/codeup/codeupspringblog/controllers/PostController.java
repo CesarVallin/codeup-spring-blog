@@ -1,6 +1,8 @@
 package edu.codeup.codeupspringblog.controllers;
 
 import edu.codeup.codeupspringblog.models.Post;
+import edu.codeup.codeupspringblog.repositories.ContactRepository;
+import edu.codeup.codeupspringblog.repositories.PostRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,17 +13,17 @@ import java.util.List;
 @Controller
 @RequestMapping("/posts")
 public class PostController {
+    // Constructor Dependency Injection
+    private PostRepository postsDao;
+    public PostController(PostRepository postsDao) {
+        this.postsDao = postsDao;
+    }
 
     @GetMapping("")
     public String indexPage(Model model) {
-        List<Post> posts = new ArrayList<>();
-        Post post1 = new Post("Amazing Title", "Cool description, kadjflkdajfds lkadjklafdjskjfd kldjfkadsjfkldj");
-        Post post2 = new Post("Great Title", "Awesome description, kldajkdlsjfad kadjfkl;adsjf adkladjkladsjf adldkjalkdsjfdksljf");
 
-        posts.add(post1);
-        posts.add(post2);
 
-        model.addAttribute("posts", posts);
+        model.addAttribute("posts", postsDao.findAll());
         return "posts/index";
     }
 
@@ -33,15 +35,19 @@ public class PostController {
     }
 
     @GetMapping("/create")
-    @ResponseBody
     public String showCreatePostView() {
-        return "view the form for creating a post";
+        return "posts/create";
     }
 
     @PostMapping("/create")
-    @ResponseBody
-    public String createPost() {
-        return "create a new post";
+    public String createPost(@RequestParam String title, @RequestParam String body) {
+        Post newPost = new Post(
+                title,
+                body
+        );
+        postsDao.save(newPost);
+
+        return "redirect:/posts";
     }
 
 //    @PostMapping("/create")
