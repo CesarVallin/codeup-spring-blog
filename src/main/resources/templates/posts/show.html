@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="/partials/header :: head"></head>
+<head th:replace="/partials/partials :: head('Show')"></head>
 <body>
-    <div th:replace="/partials/navbar :: navbar"></div>
 
-    <div>
-        <h3 th:text="${post1.getTitle()}"></h3>
-        <p th:text="${post1.getBody()}"></p>
-    </div>
+<div id="wrapper">
+    <nav th:replace="/partials/partials :: nav"></nav>
+    <header th:replace="/partials/partials :: header('Show')"></header>
+
+    <main class="container">
+        <div>
+            <h3 th:text="${post.title}"></h3>
+            <p th:text="${post.body}"></p>
+        </div>
+    </main>
+
+    <footer th:replace="/partials/partials :: footer"></footer>
+</div>
+
+
+<th:block th:replace="partials/partials :: scripts"></th:block>
 
 </body>
 </html>

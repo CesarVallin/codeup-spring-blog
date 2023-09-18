@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/posts")
 public class PostController {
     // Constructor Dependency Injection
     private PostRepository postsDao;
@@ -19,7 +18,7 @@ public class PostController {
         this.postsDao = postsDao;
     }
 
-    @GetMapping("")
+    @GetMapping("/posts")
     public String indexPage(Model model) {
 
 
@@ -27,19 +26,21 @@ public class PostController {
         return "posts/index";
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/posts/{id}")
     public String viewIndividualPost(@PathVariable long id, Model model) {
-        Post post1 = new Post("this is the title", "this is the description kdsj;kladjkldasjk;llkd lkajfkldasjlkfdj lakdjflkasdjli;fj alaskdjfklasdjf lakdjfkadjfkldjf ");
-        model.addAttribute("post1", post1);
+        if(postsDao.existsById(id)) {
+            Post foundPost = postsDao.findById(id).get();
+            model.addAttribute("post", foundPost);
+        }
         return "posts/show";
     }
 
-    @GetMapping("/create")
+    @GetMapping("/posts/create")
     public String showCreatePostView() {
         return "posts/create";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/posts/create")
     public String createPost(@RequestParam String title, @RequestParam String body) {
         Post newPost = new Post(
                 title,
