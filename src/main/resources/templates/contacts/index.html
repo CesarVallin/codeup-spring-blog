@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/partials/header :: head"></head>
+<body>
+<div th:replace="/partials/navbar :: navbar"></div>
+
+<article th:each="contact : ${contacts}">
+  <p>
+    Name: <span th:text="${contact.getName()}"></span>
+    Email: <span th:text="${contact.getEmail()}"></span>
+  </p>
+</article>
+
+</body>
+</html>
