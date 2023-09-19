@@ -30,6 +30,12 @@ public class User {
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "user")
     private List<Post> posts;
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     public User(String username, String email, String password, List<Post> posts) {
         this.username = username;
         this.email = email;
