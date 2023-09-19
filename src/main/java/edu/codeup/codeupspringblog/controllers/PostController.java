@@ -21,7 +21,6 @@ public class PostController {
     @GetMapping("/posts")
     public String indexPage(Model model) {
 
-
         model.addAttribute("posts", postsDao.findAll());
         return "posts/index";
     }
@@ -31,8 +30,9 @@ public class PostController {
         if(postsDao.existsById(id)) {
             Post foundPost = postsDao.findById(id).get();
             model.addAttribute("post", foundPost);
+            return "posts/show";
         }
-        return "posts/show";
+        return "redirect:/posts";
     }
 
     @GetMapping("/posts/create")
@@ -41,7 +41,10 @@ public class PostController {
     }
 
     @PostMapping("/posts/create")
-    public String createPost(@RequestParam String title, @RequestParam String body) {
+    public String createPost(
+            @RequestParam("title") String title,
+            @RequestParam("body") String body
+    ) {
         Post newPost = new Post(
                 title,
                 body
