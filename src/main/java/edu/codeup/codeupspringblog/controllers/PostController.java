@@ -45,6 +45,28 @@ public class PostController {
         return "redirect:/posts";
     }
 
+    @GetMapping("/posts/{id}/edit")
+    public String editIndividualPost(@PathVariable long id, Model model) {
+        if(postsDao.existsById(id)) {
+            Post foundPost = postsDao.findById(id).get();
+            model.addAttribute("post", foundPost);
+            return "posts/edit";
+        }
+        return "redirect:/posts";
+    }
+
+    @PostMapping("posts/{id}/edit")
+    public String updateEditedPost(@ModelAttribute Post post, @PathVariable long id) {
+
+        Post currentPost = postsDao.findById(id).get();
+        currentPost.setTitle(post.getTitle());
+        currentPost.setBody(post.getBody());
+        postsDao.save(currentPost);
+        return "redirect:/posts/" + currentPost.getId();
+    }
+
+
+
     @GetMapping("/posts/create")
     public String showCreatePostView(Model model) {
         model.addAttribute("post", new Post());
@@ -64,6 +86,8 @@ public class PostController {
 
         return "redirect:/posts";
     }
+
+
 
 
 
