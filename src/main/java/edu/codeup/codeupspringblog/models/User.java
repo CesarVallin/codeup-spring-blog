@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 
 @Entity
-@Table (name = "user")
+@Table (name = "users")
 public class User {
 
     @Id
@@ -18,10 +18,10 @@ public class User {
     @Column
     private long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

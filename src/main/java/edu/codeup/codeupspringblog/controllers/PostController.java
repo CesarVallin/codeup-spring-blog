@@ -55,23 +55,19 @@ public class PostController {
             @RequestParam("title") String title,
             @RequestParam("body") String body
     ) {
+
+        User currentUser = userDao.findById(1L).get();
         Post newPost = new Post(
                 title,
-                body
+                body,
+                currentUser
         );
-        User currentUser = userDao.findById(1L).get();
-        newPost.setUser(currentUser);
         postsDao.save(newPost);
 
         return "redirect:/posts";
     }
 
-//    @PostMapping("/create")
-//    @ResponseBody
-//    public String greetUser(@RequestParam(name = "username") String username, @RequestParam(name = "email") String email) {
-//        System.out.println(username + " " + email);
-//        return String.format("Hello %s %s", username, email);
-//    }
+
 
 
 }
