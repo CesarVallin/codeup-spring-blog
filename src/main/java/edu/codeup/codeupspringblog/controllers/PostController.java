@@ -48,8 +48,8 @@ public class PostController {
     @GetMapping("/posts/{id}/edit")
     public String editIndividualPost(@PathVariable long id, Model model) {
         if(postsDao.existsById(id)) {
-            Post foundPost = postsDao.findById(id).get();
-            model.addAttribute("post", foundPost);
+            Post postToEdit = postsDao.findById(id).get();
+            model.addAttribute("post", postToEdit);
             return "posts/edit";
         }
         return "redirect:/posts";
@@ -58,11 +58,11 @@ public class PostController {
     @PostMapping("posts/{id}/edit")
     public String updateEditedPost(@ModelAttribute Post post, @PathVariable long id) {
 
-        Post currentPost = postsDao.findById(id).get();
-        currentPost.setTitle(post.getTitle());
-        currentPost.setBody(post.getBody());
-        postsDao.save(currentPost);
-        return "redirect:/posts/" + currentPost.getId();
+        Post postToEdit = postsDao.findById(id).get();
+        postToEdit.setTitle(post.getTitle());
+        postToEdit.setBody(post.getBody());
+        postsDao.save(postToEdit);
+        return "redirect:/posts/" + postToEdit.getId();
     }
 
 
