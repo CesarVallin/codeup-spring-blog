@@ -5,6 +5,7 @@ import edu.codeup.codeupspringblog.models.User;
 import edu.codeup.codeupspringblog.repositories.ContactRepository;
 import edu.codeup.codeupspringblog.repositories.PostRepository;
 import edu.codeup.codeupspringblog.repositories.UserRepository;
+import edu.codeup.codeupspringblog.services.EmailSvc;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +18,13 @@ public class PostController {
     // Constructor Dependency Injection
     private PostRepository postsDao;
     private UserRepository userDao;
-    public PostController(PostRepository postsDao, UserRepository userDao) {
+    private EmailSvc emailSvc;
+
+    public PostController(PostRepository postsDao, UserRepository userDao, EmailSvc emailSvc) {
         this.postsDao = postsDao;
         this.userDao = userDao;
+        this.emailSvc = emailSvc;
     }
-
-
-
-
 
     @GetMapping("/posts")
     public String indexPage(Model model) {
@@ -83,6 +83,7 @@ public class PostController {
                 currentUser
         );
         postsDao.save(newPost);
+        emailSvc.prepareAndSend(newPost, "This is the subject", "This is the body...yay");
 
         return "redirect:/posts";
     }
