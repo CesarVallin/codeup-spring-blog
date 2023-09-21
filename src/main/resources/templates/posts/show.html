@@ -13,7 +13,10 @@
             <p th:text="${post.body}"></p>
             <p th:text="${post.user.email}"></p>
         </div>
-        <a th:href="@{|/posts/${post.id}/edit|}">Edit Post</a>
+        <div th:if="${userOwner}">
+            <a th:href="@{|/posts/${post.id}/edit|}">Edit Post</a>
+        </div>
+
     </main>
 
     <footer th:replace="/partials/partials :: footer"></footer>

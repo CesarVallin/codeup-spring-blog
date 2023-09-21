@@ -6,6 +6,7 @@ import edu.codeup.codeupspringblog.repositories.ContactRepository;
 import edu.codeup.codeupspringblog.repositories.PostRepository;
 import edu.codeup.codeupspringblog.repositories.UserRepository;
 import edu.codeup.codeupspringblog.services.EmailSvc;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +36,23 @@ public class PostController {
 
     @GetMapping("/posts/{id}")
     public String viewIndividualPost(@PathVariable long id, Model model) {
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = userDao.findById(loggedInUser.getId()).get();
+
         if(postsDao.existsById(id)) {
             Post foundPost = postsDao.findById(id).get();
-//            User currentUser = userDao.findById(1L).get();
-            model.addAttribute("post", foundPost);
-//            model.addAttribute("user", currentUser);
-            return "posts/show";
+            if(foundPost.getUser().getId() == currentUser.getId()) {
+                model.addAttribute("post", foundPost);
+                model.addAttribute("userOwner", true);
+                return "posts/show";
+            }
+            if(foundPost.getUser().getId() != currentUser.getId()) {
+                model.addAttribute("post", foundPost);
+                model.addAttribute("userOwner", false);
+                return "posts/show";
+            }
+
+
         }
         return "redirect:/posts";
     }
@@ -75,8 +87,9 @@ public class PostController {
 
     @PostMapping("/posts/create")
     public String createPost(@ModelAttribute Post post) {
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User currentUser = userDao.findById(1L).get();
+        User currentUser = userDao.findById(loggedInUser.getId()).get();
         Post newPost = new Post(
                 post.getTitle(),
                 post.getBody(),
@@ -84,7 +97,6 @@ public class PostController {
         );
         postsDao.save(newPost);
         emailSvc.prepareAndSend(newPost, "This is the subject", "This is the body...yay");
-
         return "redirect:/posts";
     }
 
