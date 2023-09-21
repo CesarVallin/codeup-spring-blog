@@ -36,29 +36,25 @@ public class PostController {
 
     @GetMapping("/posts/{id}")
     public String viewIndividualPost(@PathVariable long id, Model model) {
-        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User currentUser = userDao.findById(loggedInUser.getId()).get();
 
         if(postsDao.existsById(id)) {
             Post foundPost = postsDao.findById(id).get();
-            if(foundPost.getUser().getId() == currentUser.getId()) {
                 model.addAttribute("post", foundPost);
-                model.addAttribute("userOwner", true);
                 return "posts/show";
-            }
-            if(foundPost.getUser().getId() != currentUser.getId()) {
-                model.addAttribute("post", foundPost);
-                model.addAttribute("userOwner", false);
-                return "posts/show";
-            }
-
-
         }
         return "redirect:/posts";
     }
 
     @GetMapping("/posts/{id}/edit")
     public String editIndividualPost(@PathVariable long id, Model model) {
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (postsDao.existsById(id)) {
+            Post postToEdit = postsDao.findById(id).get();
+            if(postToEdit.getUser().getId() != loggedInUser.getId()) {
+                return "redirect:/posts";
+            }
+        }
+
         if(postsDao.existsById(id)) {
             Post postToEdit = postsDao.findById(id).get();
             model.addAttribute("post", postToEdit);
@@ -90,6 +86,7 @@ public class PostController {
         User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User currentUser = userDao.findById(loggedInUser.getId()).get();
+
         Post newPost = new Post(
                 post.getTitle(),
                 post.getBody(),
@@ -98,6 +95,20 @@ public class PostController {
         postsDao.save(newPost);
         emailSvc.prepareAndSend(newPost, "This is the subject", "This is the body...yay");
         return "redirect:/posts";
+    }
+
+    @PostMapping("/posts/{id}/delete")
+    public String deleteIndividualPost(@ModelAttribute Post post, @PathVariable long id) {
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(postsDao.existsById(id)) {
+            Post postToDelete = postsDao.findById(id).get();
+            if(postToDelete.getUser().getId() == loggedInUser.getId()) {
+                postsDao.delete(postToDelete);
+                return "redirect:/posts";
+            }
+        }
+        return "redirect:/posts";
+
     }
 
 

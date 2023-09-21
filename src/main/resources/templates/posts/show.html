@@ -13,8 +13,11 @@
             <p th:text="${post.body}"></p>
             <p th:text="${post.user.email}"></p>
         </div>
-        <div th:if="${userOwner}">
+        <div th:if="${#authentication.principal.id == post.user.id}">
             <a th:href="@{|/posts/${post.id}/edit|}">Edit Post</a>
+            <form th:method="POST" th:action="@{|/posts/${post.id}/delete|}" th:object="${post}">
+                <button type="submit" class="btn btn-dark">Delete Post</button>
+            </form>
         </div>
 
     </main>
