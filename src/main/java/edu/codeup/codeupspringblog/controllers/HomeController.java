@@ -9,7 +9,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String landingPage() {
-        return "redirect:/posts";
+        return "/home";
     }
 
     // thyme leaf knows its supposed to render this method cause of the return "home" it has to be named identically to work
